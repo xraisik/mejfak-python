@@ -1,5 +1,6 @@
 import pygame
 from random import uniform as func
+from time import sleep
 
 pygame.init()
 WIDTH, HEIGHT = 400, 600
@@ -38,24 +39,25 @@ num = 1.5
 
 score = 0
 
+def drawScore():
+    win.fill(black)
+    path = pygame.font.match_font("arial")
+    Font = pygame.font.Font(path, 30)
+    text = ''.join([chr(int(str(el), 8)) for el in [107, 141, 155, 145, 40, 157, 166, 145, 162]])
+    a = Font.render(text, 1, (255, 255, 255))
+    win.blit(a, (WIDTH // 2 - 70, HEIGHT // 3))
+    pygame.display.update()
+
+
 def drawWindow():
     win.fill(black)
-
     pygame.draw.rect(win, white, (0, 0, WIDTH, bound))
     pygame.draw.rect(win, white, (0, 0, bound, HEIGHT))
     pygame.draw.rect(win, white, (WIDTH - bound, 0, bound, HEIGHT))
-
     pygame.draw.circle(win, color, (int(x), int(y)), radius)
-
     pygame.draw.rect(win, white, (xp, yp, width, height))
-
     pygame.display.update()
 
-def drawScore(score_value):
-    font = pygame.font.SysFont("comicsans", 50)
-    text = font.render(f"Your score: {score_value}", True, white)
-    text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2))
-    win.blit(text, text_rect)
 
 run = True
 while run:
@@ -83,21 +85,14 @@ while run:
             vy *= num
             score += 1
         else:
+            drawScore()
+            sleep(10)
             run = False
+
 
     if run:
         x += vx
         y += vy
         drawWindow()
-
-game_over = True
-while game_over:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            game_over = False
-
-    win.fill(black)
-    drawScore(score)
-    pygame.display.update()
 
 pygame.quit()
